@@ -11,6 +11,7 @@ class GameConsole
         /** @type {Array<[string, number, boolean]>} */
         this.input = input;
         this.pc = 0;
+        this.oldPc = 0;
         this.accumulate = 0;
     }
 
@@ -112,10 +113,11 @@ async function main([ part, inputFile ])
         console.timeEnd(`Day 8: ${part}`);
         console.log(`Accumulator at first cycle: ${machine.accumulate}`);
     }
-    else /* this answer is basically brute forcing */
+    else /* FIXME: this answer is basically brute forcing */
     {
         while (!machine.isCycle()) machine.step();
         let lastJmp = machine.pc;
+        // find the latest instruction before we cycled
         for (; machine.input[lastJmp][2]; ++lastJmp);
         for (let i = 0; i < lastJmp;  ++i)
         {
@@ -128,7 +130,7 @@ async function main([ part, inputFile ])
                 {
                     console.timeEnd(`Day 8: ${part}`);
                     console.log(`Accumulator at end: ${machine.accumulate}, replaced: ${i}`);
-                    return;
+                    break;
                 }
                 else
                 {
